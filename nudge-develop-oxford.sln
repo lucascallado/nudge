@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{E5945028-B9E8-A5E3-4E7D-A90F46D3BF5C}") = "nudge-develop-oxford", "Assembly-CSharp.csproj", "{3E5D0664-F6B3-8898-E66C-DB573DF3F90B}"
+EndProject
+Project("{E5945028-B9E8-A5E3-4E7D-A90F46D3BF5C}") = "nudge-develop-oxford", "Assembly-CSharp-Editor.csproj", "{F1CF0451-EF97-680A-40C3-7F8A818DF2AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E5D0664-F6B3-8898-E66C-DB573DF3F90B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5D0664-F6B3-8898-E66C-DB573DF3F90B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5D0664-F6B3-8898-E66C-DB573DF3F90B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5D0664-F6B3-8898-E66C-DB573DF3F90B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CF0451-EF97-680A-40C3-7F8A818DF2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CF0451-EF97-680A-40C3-7F8A818DF2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CF0451-EF97-680A-40C3-7F8A818DF2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CF0451-EF97-680A-40C3-7F8A818DF2AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
