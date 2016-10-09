@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{2F8775D2-8D89-6C07-5895-73A4A5458716}") = "nudge-face-workinh", "Assembly-CSharp.csproj", "{00CF8DE3-34A9-204E-28A3-369771744E11}"
+EndProject
+Project("{2F8775D2-8D89-6C07-5895-73A4A5458716}") = "nudge-face-workinh", "Assembly-CSharp-Editor.csproj", "{4254E68B-5710-4C52-6876-721C20DA51D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00CF8DE3-34A9-204E-28A3-369771744E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00CF8DE3-34A9-204E-28A3-369771744E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00CF8DE3-34A9-204E-28A3-369771744E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00CF8DE3-34A9-204E-28A3-369771744E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4254E68B-5710-4C52-6876-721C20DA51D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4254E68B-5710-4C52-6876-721C20DA51D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4254E68B-5710-4C52-6876-721C20DA51D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4254E68B-5710-4C52-6876-721C20DA51D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
