@@ -13,6 +13,9 @@ public class FrameGetter : MonoBehaviour {
 	private int incrementer = 0;
 	private bool mAccessCameraImage = true;
 
+	private int cameraHeight;
+	private int cameraWidth;
+
 	private Image.PIXEL_FORMAT mPixelFormat = Image.PIXEL_FORMAT.RGBA8888;// or RGBA8888, RGB888, RGB565, YUV
 	// Boolean flag telling whether the pixel format has been registered
 	private bool mFormatRegistered = false;
@@ -67,7 +70,7 @@ public class FrameGetter : MonoBehaviour {
 		incrementer++;
 		if (mFormatRegistered)
 		{
-			if (mAccessCameraImage && incrementer %240 == 0)
+			if (mAccessCameraImage && incrementer %45 == 0)
 			{
 				Vuforia.Image image = CameraDevice.Instance.GetCameraImage(mPixelFormat);
 				WebCamTexture webCamTexture;
@@ -82,6 +85,9 @@ public class FrameGetter : MonoBehaviour {
 					Array.Reverse(pixels);
 
 					Texture2D texture = new Texture2D(image.Width, image.Height);
+
+					cameraHeight = image.Height;
+					cameraWidth = image.Width;
 
 					image.CopyToTexture (texture);
 
@@ -226,15 +232,58 @@ public class FrameGetter : MonoBehaviour {
 
 	}
 
+
+
+
+
 	IEnumerator parseDetect (WWW www) {
 		yield return www;
+
+		CubeScript cubescript = FindObjectOfType<CubeScript> ();
+		cubescript.updateCubePosition ((float)250, (float)250);
+
 
 
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.data);
+
+			string[] arr = www.data.Split('"');
+
+			//arr [8] = arr [8].Remove (0,1);
+			//arr [10] = arr [10].Remove (0,1);
+		
+			arr [8] = arr [8].Replace(",", "");
+			arr [10] = arr [10].Replace(",", "");
+
+			arr [8] = arr [8].Replace(":", "");
+			arr [10] = arr [10].Replace(":", "");
+
+			float myLeft = float.Parse(arr [8]);
+			float myTop = float.Parse(arr [10]);
+
+			Debug.Log (arr [8]);
+			Debug.Log (arr [10]);
+
+
+
+			//float myX = - ((float)cameraWidth - myLeft) + ((float)cameraWidth / 2);
+
+			//float myY = - ((float)cameraHeight - myTop) + ((float)cameraHeight / 2);
+
+			float myX = myLeft - 50;
+
+			float myY = myTop - 150;
+
+
+			Debug.Log (myX);
+			Debug.Log (myY);
+
+			cubescript.updateCubePosition (myX, myY);
+
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
 		}
 	}
+
 
 }
