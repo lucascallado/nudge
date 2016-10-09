@@ -11,9 +11,17 @@ public class FrameGetter : MonoBehaviour {
 
 	WebCamTexture webCamTexture;
 	private int incrementer = 0;
+	private int incrementer2  =0;
 	private bool mAccessCameraImage = true;
 
-	private Image.PIXEL_FORMAT mPixelFormat = Image.PIXEL_FORMAT.RGBA8888;// or RGBA8888, RGB888, RGB565, YUV
+	private float cameraHeight;
+	private float cameraWidth;
+
+	int interval = 2;
+	float nextTime = 0;
+
+	private Image.PIXEL_FORMAT mPixelFormat = Image.PIXEL_FORMAT.RGB888;// or RGBA8888, RGB888, RGB565, YUV //TANGO
+//	private Image.PIXEL_FORMAT mPixelFormat = Image.PIXEL_FORMAT.RGBA8888;// or RGBA8888, RGB888, RGB565, YUV //LOCAL
 	// Boolean flag telling whether the pixel format has been registered
 	private bool mFormatRegistered = false;
 	void Start ()
@@ -65,9 +73,9 @@ public class FrameGetter : MonoBehaviour {
 	private void OnTrackablesUpdated()
 	{
 		incrementer++;
-		if (mFormatRegistered)
+		if (mFormatRegistered )
 		{
-			if (mAccessCameraImage && incrementer %240 == 0)
+			if (mAccessCameraImage && incrementer %60 == 0)
 			{
 				Vuforia.Image image = CameraDevice.Instance.GetCameraImage(mPixelFormat);
 				WebCamTexture webCamTexture;
@@ -83,6 +91,10 @@ public class FrameGetter : MonoBehaviour {
 
 					Texture2D texture = new Texture2D(image.Width, image.Height);
 
+					cameraHeight = (float) image.Height;
+					cameraWidth = (float) image.Width;
+
+
 					image.CopyToTexture (texture);
 
 					texture.Apply ();
@@ -96,7 +108,7 @@ public class FrameGetter : MonoBehaviour {
 					//
 
 
-					File.WriteAllBytes(Application.dataPath + "SavedScreen.png", pixxels);
+//					File.WriteAllBytes(Application.dataPath + "SavedScreen.png", pixxels);
 
 					//										MemoryStream ms = new MemoryStream(pixels);
 					//					Image returnImage = System.Drawing.Image.FromStream(ms);
@@ -182,8 +194,16 @@ public class FrameGetter : MonoBehaviour {
 	//	}
 
 	public void DetectFaces(byte[] image) {
+		incrementer2++;
 
-		//		incrementer++;
+		string key;
+		if (incrementer2 % 2 == 0) {
+			key = "f86c8a3b24114d038f4690f05dbe9d12";
+		} else {
+			key = "c8b77439b26d45c28a1d331a27fd38fd";
+		}
+
+		Debug.Log ("key: " + key);
 
 		//		if (incrementer % 60 == 0) {
 
@@ -199,7 +219,7 @@ public class FrameGetter : MonoBehaviour {
 		// Add a custom header to the request.
 		// In this case a basic authentication to access a password protected resource.
 		//		headers["Ocp-Apim-Subscription-Key"] = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes("f86c8a3b24114d038f4690f05dbe9d12"));
-		headers ["Ocp-Apim-Subscription-Key"] = "f86c8a3b24114d038f4690f05dbe9d12";
+		headers ["Ocp-Apim-Subscription-Key"] = key;
 		//		headers["Content-Type"] = "application/json";
 		headers["Content-Type"] = "application/octet-stream";
 
@@ -226,15 +246,83 @@ public class FrameGetter : MonoBehaviour {
 
 	}
 
+
+
+
+
 	IEnumerator parseDetect (WWW www) {
 		yield return www;
+
+		CubeScript cubescript = FindObjectOfType<CubeScript> ();
+		cubescript.updateCubePosition ((float)900000, (float)900000);//off screen
+		Debug.Log ("SCREEN HEIGHT" + cameraHeight);
+		Debug.Log ("SCREEN Width" + cameraWidth);
+
 
 
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.data);
+
+			string[] arr = www.data.Split('"');
+
+			//arr [8] = arr [8].Remove (0,1);
+			//arr [10] = arr [10].Remove (0,1);
+		
+			arr [8] = arr [8].Replace(",", "");
+			arr [10] = arr [10].Replace(",", "");
+
+			arr [8] = arr [8].Replace(":", "");
+			arr [10] = arr [10].Replace(":", "");
+
+			float myLeft = float.Parse(arr [8]);
+			float myTop = float.Parse(arr [10]);
+
+			Debug.Log("my LEFT (top): " + arr[8]);
+			Debug.Log("my TOP (left): " + arr[10]);
+
+
+
+
+            //float myX = -((float)cameraWidth - myLeft) + ((float)cameraWidth /2);
+
+            //float myY = -((float)cameraHeight - myTop) + ((float)cameraHeight /2 );
+
+            //float myX = -myLeft;
+            //float myY = -myTop;
+
+			//WORKS LOCALLY
+//            float myX = -myTop/2 + 120;
+//
+//            float myY = -myLeft/2 + 120;
+
+//			cameraHeight = (float)Screen.height * (float) .27;
+//			cameraWidth = (float)Screen.width * (float) .132;
+
+			float myX = -myTop/2 + cameraWidth/6;
+
+			float myY = -myLeft/2 + cameraHeight/4;
+
+            //float myX = (cameraWidth - (float)myLeft);
+
+            //float myY = (cameraHeight - (float)myTop);
+
+            //float myX = myLeft - ((float)cameraWidth / 2);
+            //float myY = myTop - ((float)cameraHeight / 2);
+
+
+
+            Debug.Log("my X: " + myX);
+            Debug.Log("my Y: " + myY);
+
+            //myX = (float) 25.0;
+            //myY = (float )25.0;
+
+            cubescript.updateCubePosition (myX, myY);
+
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
 		}
 	}
+
 
 }
