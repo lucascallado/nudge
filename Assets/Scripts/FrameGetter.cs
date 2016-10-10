@@ -253,6 +253,7 @@ public class FrameGetter : MonoBehaviour {
 
 	}
 
+	string myFaceID;
 	void accessData(JSONObject obj){
 		switch(obj.type){
 		case JSONObject.Type.OBJECT:
@@ -270,6 +271,10 @@ public class FrameGetter : MonoBehaviour {
 			break;
 		case JSONObject.Type.STRING:
 			Debug.Log(obj.str);
+			if (obj.str.Length > 10) {
+				myFaceID = obj.str;
+				Debug.Log ("My FaceID:" + myFaceID);
+			}
 			break;
 		case JSONObject.Type.NUMBER:
 			Debug.Log(obj.n);
@@ -282,9 +287,7 @@ public class FrameGetter : MonoBehaviour {
 			break;
 		}
 	}
-
-
-
+	 
 
 	IEnumerator parseDetect (WWW www) {
 		yield return www;
@@ -325,7 +328,10 @@ public class FrameGetter : MonoBehaviour {
 
 
 
-
+			string myJson = www.data.ToString();
+			JSONObject obj = new JSONObject(myJson);
+			accessData(obj);
+			 
             //float myX = -((float)cameraWidth - myLeft) + ((float)cameraWidth /2);
 
             //float myY = -((float)cameraHeight - myTop) + ((float)cameraHeight /2 );
@@ -360,77 +366,83 @@ public class FrameGetter : MonoBehaviour {
             //myX = (float) 25.0;
             //myY = (float )25.0;
 
-            cubescript.updateCubePosition (myX, myY);
+//            cubescript.updateCubePosition (myX, myY);
+			idFace(myFaceID);
 
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
 		}
 	}
 
-//	public void idFace(string faceId) {
-//		string personGroupId = "nudge_hackathon";
-//		string personIdMatch = "f5c22d5a-21e1-42c0-b990-6f342fc6da29";
-//		string key;
-//		if (incrementer2 % 2 == 0) {
-//			key = "f86c8a3b24114d038f4690f05dbe9d12";
-//		} else {
-//			key = "c8b77439b26d45c28a1d331a27fd38fd";
-//		}
-//
-//		WWWForm form = new WWWForm ();
-//		Dictionary<string, string> headers = new Dictionary<string, string> ();
-//
-//		string url = "https://api.projectoxford.ai/face/v1.0/identify/";
-//
-//		// Add a custom header to the request.
-//		// In this case a basic authentication to access a password protected resource.
-//		//		headers["Ocp-Apim-Subscription-Key"] = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes("f86c8a3b24114d038f4690f05dbe9d12"));
-//		headers ["Ocp-Apim-Subscription-Key"] = key;
-//		//		headers["Content-Type"] = "application/json";
-//		headers["Content-Type"] = "application/json";
-//
-//		//encode as json
-//
-//		JSONObject j = new JSONObject(JSONObject.Type.OBJECT);
-//		// number
-//		j.AddField("personGroupId", personGroupId);
-//		// string
-//		// array
-//		JSONObject arr = new JSONObject(JSONObject.Type.ARRAY);
-//		j.AddField("faceIds", arr);
-//
-//		arr.Add(faceId);
-//
-//		string encodedString = j.print ();
-//
-//
-//		// Post a request to an URL with our custom headers
-//		WWW www = new WWW (url, encodedString, headers);
-//
-//		StartCoroutine (parseIdentify (www, personIdMatch));
-//	}
-//
-//	IEnumerator parseIdentify (WWW www, string personIdMatch) {
-//		yield return www;
-//
-//		CubeScript cubescript = FindObjectOfType<CubeScript> ();
-//
-//
-//		if (www.error == null) {
-//			Debug.Log ("WWW Ok!: " + www.data);
-//
-//			//parse www.data.candidates[0].personId;
-//			//get real personId
-//			string personId = "SomeID";
-//
-//			if (personId == personIdMatch) {
-//
-//			}
-//
-//
-//
-//		} else {
-//			Debug.Log ("WWW Error: " + www.error);
-//		}
-//	}
+	public void idFace(string faceId) {
+		string personGroupId = "nudge_hackathon";
+		string personIdMatch = "f5c22d5a-21e1-42c0-b990-6f342fc6da29";
+		string key;
+		if (incrementer2 % 2 == 0) {
+			key = "f86c8a3b24114d038f4690f05dbe9d12";
+		} else {
+			key = "c8b77439b26d45c28a1d331a27fd38fd";
+		}
+
+		WWWForm form = new WWWForm ();
+		Dictionary<string, string> headers = new Dictionary<string, string> ();
+
+		string url = "https://api.projectoxford.ai/face/v1.0/identify/";
+
+		// Add a custom header to the request.
+		// In this case a basic authentication to access a password protected resource.
+		//		headers["Ocp-Apim-Subscription-Key"] = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes("f86c8a3b24114d038f4690f05dbe9d12"));
+		headers ["Ocp-Apim-Subscription-Key"] = key;
+		//		headers["Content-Type"] = "application/json";
+		headers["Content-Type"] = "application/json";
+
+		//encode as json
+
+		JSONObject j = new JSONObject(JSONObject.Type.OBJECT);
+		// number
+		j.AddField("personGroupId", personGroupId);
+		// string
+		// array
+		JSONObject arr = new JSONObject(JSONObject.Type.ARRAY);
+		j.AddField("faceIds", arr);
+
+		arr.Add(faceId);
+
+		string encodedString = j.Print ();
+
+
+		// Post a request to an URL with our custom headers
+		byte[] pData = System.Text.Encoding.ASCII.GetBytes(encodedString.ToCharArray());
+
+
+		WWW www = new WWW (url, pData, headers);
+
+		StartCoroutine (parseIdentify (www, personIdMatch));
+	}
+
+	IEnumerator parseIdentify (WWW www, string personIdMatch) {
+		yield return www;
+
+		CubeScript cubescript = FindObjectOfType<CubeScript> ();
+
+
+		if (www.error == null) {
+			Debug.Log ("WWW Ok!: " + www.data);
+
+			//parse www.data.candidates[0].personId;
+			//get real personId
+			string personId = "SomeID";
+
+			if (personId == personIdMatch) {
+				//update cube 1
+			} else {
+				//update cube2
+			}
+
+
+
+		} else {
+			Debug.Log ("WWW Error: " + www.error);
+		}
+	}
 }
