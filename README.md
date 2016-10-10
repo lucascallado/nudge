@@ -23,3 +23,9 @@ Ideally, this would eventually recognize individual faces instead just sensing w
 unity
 microsoft-cognitive-services
 vuforia
+
+## Watch Nudge in action
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=IQ9PetAPLa8
+" target="_blank"><img src="http://img.youtube.com/vi/IQ9PetAPLa8/0.jpg" 
+alt="Nudge" width="240" height="180" border="10" /></a>
