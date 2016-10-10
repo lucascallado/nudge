@@ -254,6 +254,7 @@ public class FrameGetter : MonoBehaviour {
 	}
 
 	string myFaceID;
+	string myPersonID;
 	void accessData(JSONObject obj){
 		switch(obj.type){
 		case JSONObject.Type.OBJECT:
@@ -287,25 +288,57 @@ public class FrameGetter : MonoBehaviour {
 			break;
 		}
 	}
-	 
+	void accessDataPerson(JSONObject obj){
+		switch(obj.type){
+		case JSONObject.Type.OBJECT:
+			for(int i = 0; i < obj.list.Count; i++){
+				string key = (string)obj.keys[i];
+				JSONObject j = (JSONObject)obj.list[i];
+				Debug.Log(key);
+				accessData(j);
+			}
+			break;
+		case JSONObject.Type.ARRAY:
+			foreach(JSONObject j in obj.list){
+				accessData(j);
+			}
+			break;
+		case JSONObject.Type.STRING:
+			Debug.Log(obj.str);
+			if (obj.str.Length > 10) {
+				myPersonID = obj.str;
+				Debug.Log ("preson id:" + myPersonID);
+			}
+			break;
+		case JSONObject.Type.NUMBER:
+			Debug.Log(obj.n);
+			break;
+		case JSONObject.Type.BOOL:
+			Debug.Log(obj.b);
+			break;
+		case JSONObject.Type.NULL:
+			Debug.Log("NULL");
+			break;
+		}
+	}
+
 
 	IEnumerator parseDetect (WWW www) {
 		yield return www;
 
 		CubeScript cubescript = FindObjectOfType<CubeScript> ();
 		cubescript.updateCubePosition ((float)900000, (float)900000);//off screen
-		Debug.Log ("SCREEN HEIGHT" + cameraHeight);
-		Debug.Log ("SCREEN Width" + cameraWidth);
+		//Debug.Log ("SCREEN HEIGHT" + cameraHeight);
+		//Debug.Log ("SCREEN Width" + cameraWidth);
 
 
 
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.data);
-//
-//			string myJson = www.data.ToString();
-//			JSONObject j = new JSONObject(myJson);
-//
-//			accessData (j);
+
+			string myJson = www.data.ToString();
+			JSONObject j = new JSONObject(myJson);
+			accessData (j);
 
 
 
@@ -323,14 +356,14 @@ public class FrameGetter : MonoBehaviour {
 			float myLeft = float.Parse(arr [8]);
 			float myTop = float.Parse(arr [10]);
 
-			Debug.Log("my LEFT (top): " + arr[8]);
-			Debug.Log("my TOP (left): " + arr[10]);
+			//Debug.Log("my LEFT (top): " + arr[8]);
+			//Debug.Log("my TOP (left): " + arr[10]);
 
 
 
-			string myJson = www.data.ToString();
-			JSONObject obj = new JSONObject(myJson);
-			accessData(obj);
+//			string myJson = www.data.ToString();
+//			JSONObject obj = new JSONObject(myJson);
+//			accessData(obj);
 			 
             //float myX = -((float)cameraWidth - myLeft) + ((float)cameraWidth /2);
 
@@ -360,21 +393,25 @@ public class FrameGetter : MonoBehaviour {
 
 
 
-            Debug.Log("my X: " + myX);
-            Debug.Log("my Y: " + myY);
+            //Debug.Log("my X: " + myX);
+            //Debug.Log("my Y: " + myY);
 
             //myX = (float) 25.0;
             //myY = (float )25.0;
 
 //            cubescript.updateCubePosition (myX, myY);
-			idFace(myFaceID);
+			idFace(myFaceID, myX, myY);
 
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
 		}
 	}
 
-	public void idFace(string faceId) {
+	public void idFace(string faceId, float myX, float myY) {
+		Debug.Log ("faceid:"+faceId);
+		if (faceId.Length < 1) {
+			return;
+		}
 		string personGroupId = "nudge_hackathon";
 		string personIdMatch = "f5c22d5a-21e1-42c0-b990-6f342fc6da29";
 		string key;
@@ -417,29 +454,40 @@ public class FrameGetter : MonoBehaviour {
 
 		WWW www = new WWW (url, pData, headers);
 
-		StartCoroutine (parseIdentify (www, personIdMatch));
+		StartCoroutine (parseIdentify (www, personIdMatch, myX, myY));
 	}
 
-	IEnumerator parseIdentify (WWW www, string personIdMatch) {
+	IEnumerator parseIdentify (WWW www, string personIdMatch, float myX, float myY) {
 		yield return www;
 
-		CubeScript cubescript = FindObjectOfType<CubeScript> ();
+
 
 
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.data);
 
+			string myJson = www.data.ToString();
+			JSONObject j = new JSONObject(myJson);
+			accessDataPerson (j);
+
+			Debug.Log ("personID:"+myPersonID);
+
 			//parse www.data.candidates[0].personId;
 			//get real personId
-			string personId = "SomeID";
 
-			if (personId == personIdMatch) {
-				//update cube 1
+			if (myPersonID == personIdMatch) {
+//				CubeScript2 cubescript2 = FindObjectOfType<CubeScript2> ();
+//				cubescript2.updateCubePosition (myX, myY);
+				CubeScript cubescript = FindObjectOfType<CubeScript> ();
+				cubescript.updateCubePosition (myX, myY);
+
+
 			} else {
-				//update cube2
+//				CubeScript cubescript = FindObjectOfType<CubeScript> ();
+//				cubescript.updateCubePosition (myX, myY);
+				CubeScript2 cubescript2 = FindObjectOfType<CubeScript2> ();
+				cubescript2.updateCubePosition (myX, myY);
 			}
-
-
 
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
