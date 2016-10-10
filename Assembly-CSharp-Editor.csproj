@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{4254E68B-5710-4C52-6876-721C20DA51D6}</ProjectGuid>
+    <ProjectGuid>{97D8B463-7A78-AD52-6F9C-8A1053E71965}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\JSON\Editor\JSONChecker.cs" />
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\CustomAction.cs" />
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\EditorCallbackViewer.cs" />
      <Compile Include="Assets\ProCore\ProBuilder\API Examples\Editor\RenameNewObjects.cs" />
@@ -80,6 +81,7 @@
      <None Include="Assets\ProCore\ProBuilder\API Examples\Icosphere FFT\README.txt" />
      <None Include="Assets\ProCore\ProBuilder\About\changelog.txt" />
      <None Include="Assets\ProCore\ProBuilder\Shader\DiffuseVertexColor.shader" />
+     <None Include="Assets\JSON\readme.txt" />
      <None Include="Assets\link.xml" />
      <None Include="Assets\Vuforia\Shaders\VertexLitWithZ.shader" />
      <None Include="Assets\readme_SDK.txt" />
@@ -106,7 +108,7 @@
      <None Include="Assets\Vuforia\Shaders\Text3D.shader" />
      <None Include="Assets\ProCore\ProBuilder\About\Credits.txt" />
  <Reference Include="Assembly-UnityScript-Editor-firstpass">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Library/ScriptAssemblies/Assembly-UnityScript-Editor-firstpass.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Library/ScriptAssemblies/Assembly-UnityScript-Editor-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
@@ -133,25 +135,25 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderCore-Unity5">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/ProCore/ProBuilder/Classes/ProBuilderCore-Unity5.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/ProCore/ProBuilder/Classes/ProBuilderCore-Unity5.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderMeshOps-Unity5">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps-Unity5.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/ProCore/ProBuilder/Classes/ProBuilderMeshOps-Unity5.dll</HintPath>
  </Reference>
  <Reference Include="KDTree">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/ProCore/ProBuilder/Classes/ClassesLib/KDTree.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/ProCore/ProBuilder/Classes/ClassesLib/KDTree.dll</HintPath>
  </Reference>
  <Reference Include="Triangle">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/ProCore/ProBuilder/Classes/ClassesLib/Triangle.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/ProCore/ProBuilder/Classes/ClassesLib/Triangle.dll</HintPath>
  </Reference>
  <Reference Include="ProBuilderEditor-Unity5">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/ProCore/ProBuilder/Editor/ProBuilderEditor-Unity5.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/ProCore/ProBuilder/Editor/ProBuilderEditor-Unity5.dll</HintPath>
  </Reference>
  <Reference Include="Vuforia.UnityExtensions.Editor">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/Vuforia/Editor/Scripts/Vuforia.UnityExtensions.Editor.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/Vuforia/Editor/Scripts/Vuforia.UnityExtensions.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Vuforia.UnityExtensions">
- <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/nudge-face-workinh/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
+ <HintPath>C:/Users/ux513/Downloads/nudge-face-workinh/gitstuff/nudge-v2/nudge/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -165,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{00CF8DE3-34A9-204E-28A3-369771744E11}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{7A92F934-8533-F077-14A5-DAD334A5DE28}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
