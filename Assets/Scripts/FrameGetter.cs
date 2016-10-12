@@ -253,13 +253,17 @@ public class FrameGetter : MonoBehaviour {
 
 	}
 
+	string myFaceID;
+	string myPersonID = "";
+	int times = 0;
+
 	void accessData(JSONObject obj){
 		switch(obj.type){
 		case JSONObject.Type.OBJECT:
 			for(int i = 0; i < obj.list.Count; i++){
 				string key = (string)obj.keys[i];
 				JSONObject j = (JSONObject)obj.list[i];
-				Debug.Log(key);
+//				Debug.Log(key);
 				accessData(j);
 			}
 			break;
@@ -269,21 +273,63 @@ public class FrameGetter : MonoBehaviour {
 			}
 			break;
 		case JSONObject.Type.STRING:
-			Debug.Log(obj.str);
+//			Debug.Log(obj.str);
+			if (obj.str.Length > 10) {
+				myFaceID = obj.str;
+				Debug.Log ("My FaceID:" + myFaceID);
+			}
 			break;
 		case JSONObject.Type.NUMBER:
-			Debug.Log(obj.n);
+//			Debug.Log(obj.n);
 			break;
 		case JSONObject.Type.BOOL:
-			Debug.Log(obj.b);
+//			Debug.Log(obj.b);
 			break;
 		case JSONObject.Type.NULL:
-			Debug.Log("NULL");
+//			Debug.Log("NULL");
 			break;
 		}
 	}
+	void accessDataPerson(JSONObject obj){
+		
+		Debug.Log ("times " + times);
+		switch(obj.type){
+		case JSONObject.Type.OBJECT:
+			for(int i = 0; i < obj.list.Count; i++){
+				string key = (string)obj.keys[i];
+				JSONObject j = (JSONObject)obj.list[i];
+//				Debug.Log(key);
 
+				accessDataPerson(j);
+			}
+			break;
+		case JSONObject.Type.ARRAY:
+			times++;
+//			Debug.Log ("timeshello  " + times);
 
+			foreach(JSONObject j in obj.list){
+				accessDataPerson(j);
+			}
+			break;
+		case JSONObject.Type.STRING:
+//			Debug.Log(obj.str);
+			if (obj.str.Length > 10 && times == 2) {
+				myPersonID = obj.str;
+				Debug.Log ("preson id: " + myPersonID);
+				times = 0;
+			}
+			break;
+		case JSONObject.Type.NUMBER:
+//			Debug.Log(obj.n);
+			break;
+		case JSONObject.Type.BOOL:
+//			Debug.Log(obj.b);
+			break;
+		case JSONObject.Type.NULL:
+//			Debug.Log("NULL");
+			break;
+		}
+	}
 
 
 	IEnumerator parseDetect (WWW www) {
@@ -291,18 +337,21 @@ public class FrameGetter : MonoBehaviour {
 
 		CubeScript cubescript = FindObjectOfType<CubeScript> ();
 		cubescript.updateCubePosition ((float)900000, (float)900000);//off screen
-		Debug.Log ("SCREEN HEIGHT" + cameraHeight);
-		Debug.Log ("SCREEN Width" + cameraWidth);
+
+		CubeScript2 cubescript2 = FindObjectOfType<CubeScript2> ();
+		cubescript2.updateCubePosition ((float)900000, (float)900000);
+
+		//Debug.Log ("SCREEN HEIGHT" + cameraHeight);
+		//Debug.Log ("SCREEN Width" + cameraWidth);
 
 
 
 		if (www.error == null) {
 			Debug.Log ("WWW Ok!: " + www.data);
-//
-//			string myJson = www.data.ToString();
-//			JSONObject j = new JSONObject(myJson);
-//
-//			accessData (j);
+
+			string myJson = www.data.ToString();
+			JSONObject j = new JSONObject(myJson);
+			accessData (j);
 
 
 
@@ -320,12 +369,15 @@ public class FrameGetter : MonoBehaviour {
 			float myLeft = float.Parse(arr [8]);
 			float myTop = float.Parse(arr [10]);
 
-			Debug.Log("my LEFT (top): " + arr[8]);
-			Debug.Log("my TOP (left): " + arr[10]);
+			//Debug.Log("my LEFT (top): " + arr[8]);
+			//Debug.Log("my TOP (left): " + arr[10]);
 
 
 
-
+//			string myJson = www.data.ToString();
+//			JSONObject obj = new JSONObject(myJson);
+//			accessData(obj);
+			
             //float myX = -((float)cameraWidth - myLeft) + ((float)cameraWidth /2);
 
             //float myY = -((float)cameraHeight - myTop) + ((float)cameraHeight /2 );
@@ -354,83 +406,110 @@ public class FrameGetter : MonoBehaviour {
 
 
 
-            Debug.Log("my X: " + myX);
-            Debug.Log("my Y: " + myY);
+            //Debug.Log("my X: " + myX);
+            //Debug.Log("my Y: " + myY);
 
             //myX = (float) 25.0;
             //myY = (float )25.0;
 
-            cubescript.updateCubePosition (myX, myY);
+//            cubescript.updateCubePosition (myX, myY);
+			idFace(myFaceID, myX, myY);
 
 		} else {
 			Debug.Log ("WWW Error: " + www.error);
 		}
 	}
 
-//	public void idFace(string faceId) {
-//		string personGroupId = "nudge_hackathon";
-//		string personIdMatch = "f5c22d5a-21e1-42c0-b990-6f342fc6da29";
-//		string key;
-//		if (incrementer2 % 2 == 0) {
-//			key = "f86c8a3b24114d038f4690f05dbe9d12";
-//		} else {
-//			key = "c8b77439b26d45c28a1d331a27fd38fd";
-//		}
-//
-//		WWWForm form = new WWWForm ();
-//		Dictionary<string, string> headers = new Dictionary<string, string> ();
-//
-//		string url = "https://api.projectoxford.ai/face/v1.0/identify/";
-//
-//		// Add a custom header to the request.
-//		// In this case a basic authentication to access a password protected resource.
-//		//		headers["Ocp-Apim-Subscription-Key"] = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes("f86c8a3b24114d038f4690f05dbe9d12"));
-//		headers ["Ocp-Apim-Subscription-Key"] = key;
-//		//		headers["Content-Type"] = "application/json";
-//		headers["Content-Type"] = "application/json";
-//
-//		//encode as json
-//
-//		JSONObject j = new JSONObject(JSONObject.Type.OBJECT);
-//		// number
-//		j.AddField("personGroupId", personGroupId);
-//		// string
-//		// array
-//		JSONObject arr = new JSONObject(JSONObject.Type.ARRAY);
-//		j.AddField("faceIds", arr);
-//
-//		arr.Add(faceId);
-//
-//		string encodedString = j.print ();
-//
-//
-//		// Post a request to an URL with our custom headers
-//		WWW www = new WWW (url, encodedString, headers);
-//
-//		StartCoroutine (parseIdentify (www, personIdMatch));
-//	}
-//
-//	IEnumerator parseIdentify (WWW www, string personIdMatch) {
-//		yield return www;
-//
-//		CubeScript cubescript = FindObjectOfType<CubeScript> ();
-//
-//
-//		if (www.error == null) {
-//			Debug.Log ("WWW Ok!: " + www.data);
-//
-//			//parse www.data.candidates[0].personId;
-//			//get real personId
-//			string personId = "SomeID";
-//
-//			if (personId == personIdMatch) {
-//
-//			}
-//
-//
-//
-//		} else {
-//			Debug.Log ("WWW Error: " + www.error);
-//		}
-//	}
+	public void idFace(string faceId, float myX, float myY) {
+		Debug.Log ("faceid:"+faceId);
+		if (faceId.Length < 1) {
+			return;
+		}
+		string personGroupId = "nudge_hackathon";
+		string personIdMatch = "f5c22d5a-21e1-42c0-b990-6f342fc6da29";
+		string key;
+		if (incrementer2 % 2 == 0) {
+			key = "f86c8a3b24114d038f4690f05dbe9d12";
+		} else {
+			key = "c8b77439b26d45c28a1d331a27fd38fd";
+		}
+
+		WWWForm form = new WWWForm ();
+		Dictionary<string, string> headers = new Dictionary<string, string> ();
+
+		string url = "https://api.projectoxford.ai/face/v1.0/identify/";
+
+		// Add a custom header to the request.
+		// In this case a basic authentication to access a password protected resource.
+		//		headers["Ocp-Apim-Subscription-Key"] = System.Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes("f86c8a3b24114d038f4690f05dbe9d12"));
+		headers ["Ocp-Apim-Subscription-Key"] = key;
+		//		headers["Content-Type"] = "application/json";
+		headers["Content-Type"] = "application/json";
+
+		//encode as json
+
+		JSONObject j = new JSONObject(JSONObject.Type.OBJECT);
+		// number
+		j.AddField("personGroupId", personGroupId);
+		// string
+		// array
+		JSONObject arr = new JSONObject(JSONObject.Type.ARRAY);
+		j.AddField("faceIds", arr);
+
+		arr.Add(faceId);
+
+		string encodedString = j.Print ();
+
+
+		// Post a request to an URL with our custom headers
+		byte[] pData = System.Text.Encoding.ASCII.GetBytes(encodedString.ToCharArray());
+
+
+		WWW www = new WWW (url, pData, headers);
+
+		StartCoroutine (parseIdentify (www, personIdMatch, myX, myY));
+	}
+
+	IEnumerator parseIdentify (WWW www, string personIdMatch, float myX, float myY) {
+		yield return www;
+
+		if (www.error == null) {
+			Debug.Log ("WWW2 : " + www.data);
+
+			string myJson = www.data.ToString();
+			JSONObject j1 = new JSONObject(myJson);
+			times = 0;
+			myPersonID = "";
+			try{
+			accessDataPerson (j1);
+			} finally {
+			}
+
+			Debug.Log ("past ACCESSDATAPERSON");
+
+			Debug.Log ("personID: "+myPersonID);
+
+			//parse www.data.candidates[0].personId;
+			//get real personId
+
+			if (myPersonID == personIdMatch) {
+//				CubeScript2 cubescript2 = FindObjectOfType<CubeScript2> ();
+//				cubescript2.updateCubePosition (myX, myY);
+				Debug.Log("MATCH!");
+				CubeScript cubescript = FindObjectOfType<CubeScript> ();
+				cubescript.updateCubePosition (myX, myY);
+
+
+			} else {
+//				CubeScript cubescript = FindObjectOfType<CubeScript> ();
+//				cubescript.updateCubePosition (myX, myY);
+				Debug.Log("Not matched :(");
+				CubeScript2 cubescript2 = FindObjectOfType<CubeScript2> ();
+				cubescript2.updateCubePosition (myX, myY);
+			}
+
+		} else {
+			Debug.Log ("WWW Error: " + www.error);
+		}
+	}
 }
