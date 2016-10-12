@@ -1,5 +1,9 @@
 # nudge
-Hackathon MIT - 2016
+Reality, Virtually, Hackathon @ MIT - 2016
+[realityvirtuallyhack.com](http://www.realityvirtuallyhack.com/)
+
+## October 10, 2016 --- 1st. Place Winner for Human Social Connection
+This project is applying Augmented Reality [Wikipedia AR](https://en.wikipedia.org/wiki/Augmented_reality)
 
 ## Inspiration
 We were inspired by how AR (particularly in Pokemon Go) started organic conversations, brought people together and created communities.
@@ -28,4 +32,4 @@ vuforia
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=IQ9PetAPLa8
 " target="_blank"><img src="http://img.youtube.com/vi/IQ9PetAPLa8/0.jpg" 
-alt="Nudge" width="240" height="180" border="10" /></a>
+alt="Nudge" width="480" height="360" border="10" /></a>
